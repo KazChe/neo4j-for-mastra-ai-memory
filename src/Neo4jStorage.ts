@@ -1,4 +1,4 @@
-import neo4j, { Driver, session } from "neo4j-driver";
+import neo4j, { Driver } from "neo4j-driver";
 
 export interface Neo4jStorageConfig {
   uri: string;
