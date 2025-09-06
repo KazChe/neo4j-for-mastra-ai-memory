@@ -1,4 +1,4 @@
-import neo4j, { Driver } from "neo4j-driver";
+import neo4j, { Driver, session } from "neo4j-driver";
 
 export interface Neo4jStorageConfig {
   uri: string;
@@ -17,14 +17,49 @@ export class Neo4jStorage {
     this.database = config.database || "neo4j";
     this._hasInitialized = false;
   }
-  //TODO:create constraints and indexes for Mastra data
 
-  //TODO:create constraints for mastrathreads
+  async init(): Promise<void> {
+    await this.initialize();
+  }
 
-  //TODO:create constraints for messages
+  async initialize(): Promise<void> {
+    if (this._hasInitialized) return;
 
-  //TODO: create indexes for performance
+    //create constraints and indexes for Mastra data
+    const session = this.driver.session({ database: this.database });
 
-  //TODO: implement MastraStorage interface methods with Neo4j implementation
+    try {
+      //create constraints for mastra threads
+      await session.run(`
+        CREATE CONSTRAINT thread_id_unique IF NOT EXISTS
+        FOR (t:Thread) REQUIRE t.id IS UNIQUE
+      `);
 
+      // constraints for messages
+      await session.run(`
+        CREATE CONSTRAINT message_id_unique IF NOT EXISTS
+        FOR (m:Message) REQUIRE m.id IS UNIQUE
+      `);
+
+      // indexes for performance
+      await session.run(`
+        CREATE INDEX thread_resource_id IF NOT EXISTS
+        FOR (t:Thread) ON (t.resourceId)
+      `);
+
+      await session.run(`
+        CREATE INDEX message_thread_id IF NOT EXISTS
+        FOR (m:Message) ON (m.threadId)
+      `);
+
+      await session.run(`
+        CREATE INDEX message_created_at IF NOT EXISTS
+        FOR (m:Message) ON (m.createdAt)
+      `);
+
+      this._hasInitialized = true;
+    } finally {
+      await session.close();
+    }
+  }
 }
