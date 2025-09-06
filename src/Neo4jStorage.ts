@@ -262,5 +262,195 @@ export class Neo4jStorage {
     console.log(`Getting workflow runs with args:`, args);
     return { runs: [] };
   }
-  //TODO:getWorkflowRunById
+    async getWorkflowRunById(args: { runId: string; workflowName?: string }): Promise<any | null> {
+    // Neo4j doesn't use workflows, but we need to implement this
+    console.log(`Getting workflow run by ID:`, args);
+    return null;
+  }
+
+  // Required scoring methods
+  async getScoreById({ id }: { id: string }): Promise<any | null> {
+    // Neo4j doesn't use scoring, but we need to implement this
+    console.log(`Getting score by ID:`, id);
+    return null;
+  }
+
+  async saveScore(score: any): Promise<{ score: any }> {
+    // Neo4j doesn't use scoring, but we need to implement this
+    console.log(`Saving score:`, score);
+    return { score };
+  }
+
+  async getScoresByScorerId({
+    scorerId,
+    pagination,
+    entityId,
+    entityType,
+    source,
+  }: {
+    scorerId: string;
+    pagination: any;
+    entityId?: string;
+    entityType?: string;
+    source?: string;
+  }): Promise<{
+    pagination: any;
+    scores: any[];
+  }> {
+    // Neo4j doesn't use scoring, but we need to implement this
+    console.log(`Getting scores by scorer ID:`, scorerId);
+    return { pagination, scores: [] };
+  }
+
+  async getScoresByRunId({ runId, pagination }: { runId: string; pagination: any }): Promise<{
+    pagination: any;
+    scores: any[];
+  }> {
+    // Neo4j doesn't use scoring, but we need to implement this
+    console.log(`Getting scores by run ID:`, runId);
+    return { pagination, scores: [] };
+  }
+
+  async getScoresByEntityId({
+    entityId,
+    entityType,
+    pagination,
+  }: {
+    pagination: any;
+    entityId: string;
+    entityType: string;
+  }): Promise<{
+    pagination: any;
+    scores: any[];
+  }> {
+    // Neo4j doesn't use scoring, but we need to implement this
+    console.log(`Getting scores by entity ID:`, entityId);
+    return { pagination, scores: [] };
+  }
+
+  async getEvals(options: any): Promise<any> {
+    // Neo4j doesn't use evaluations, but we need to implement this
+    console.log(`Getting evals with options:`, options);
+    return { evals: [] };
+  }
+
+  async getEvalsByAgentName(agentName: string, type?: string): Promise<any[]> {
+    // Neo4j doesn't use evaluations, but we need to implement this
+    console.log(`Getting evals by agent name:`, agentName);
+    return [];
+  }
+
+  // Required observability methods
+  async createAISpan(span: any): Promise<void> {
+    // Neo4j doesn't use AI tracing, but we need to implement this
+    console.log(`Creating AI span:`, span);
+  }
+
+  async updateAISpan(params: { spanId: string; traceId: string; updates: any }): Promise<void> {
+    // Neo4j doesn't use AI tracing, but we need to implement this
+    console.log(`Updating AI span:`, params);
+  }
+
+  async getAITrace(traceId: string): Promise<any | null> {
+    // Neo4j doesn't use AI tracing, but we need to implement this
+    console.log(`Getting AI trace:`, traceId);
+    return null;
+  }
+
+  async getAITracesPaginated(args: any): Promise<{
+    pagination: any;
+    spans: any[];
+  }> {
+    // Neo4j doesn't use AI tracing, but we need to implement this
+    console.log(`Getting AI traces paginated:`, args);
+    return { pagination: {}, spans: [] };
+  }
+
+  async batchCreateAISpans(args: { records: any[] }): Promise<void> {
+    // Neo4j doesn't use AI tracing, but we need to implement this
+    console.log(`Batch creating AI spans:`, args.records.length, "records");
+  }
+
+  async batchUpdateAISpans(args: { records: any[] }): Promise<void> {
+    // Neo4j doesn't use AI tracing, but we need to implement this
+    console.log(`Batch updating AI spans:`, args.records.length, "records");
+  }
+
+  async batchDeleteAITraces(args: { traceIds: string[] }): Promise<void> {
+    // Neo4j doesn't use AI tracing, but we need to implement this
+    console.log(`Batch deleting AI traces:`, args.traceIds.length, "traces");
+  }
+
+  // Required trace methods
+  async getTraces(args: any): Promise<any[]> {
+    // Neo4j doesn't use traces, but we need to implement this
+    console.log(`Getting traces with args:`, args);
+    return [];
+  }
+
+  async getTracesPaginated(args: any): Promise<any> {
+    // Neo4j doesn't use traces, but we need to implement this
+    console.log(`Getting traces paginated with args:`, args);
+    return { traces: [] };
+  }
+
+  async batchTraceInsert({ records }: { records: any[] }): Promise<void> {
+    // Neo4j doesn't use traces, but we need to implement this
+    console.log(`Batch inserting traces:`, records.length, "records");
+  }
+
+  // Required resource methods - using existing implementations
+
+  // Required base properties
+  get component(): string {
+    return "Neo4jStorage";
+  }
+
+  get logger(): any {
+    return console;
+  }
+
+  // Required base methods
+  __setLogger(logger: any): void {
+    // Logger is already set
+  }
+
+  __setTelemetry(telemetry: any): void {
+    // Telemetry is not used
+  }
+
+  __setStorage(storage: any): void {
+    // Storage is not used
+  }
+
+  __setAgents(agents: any): void {
+    // Agents are not used
+  }
+
+  __setTTS(tts: any): void {
+    // TTS is not used
+  }
+
+  __setVectors(vectors: any): void {
+    // Vectors are not used
+  }
+
+  __setMemory(memory: any): void {
+    // Memory is not used
+  }
+
+  // Final required properties
+  get __getTelemetry(): any {
+    return undefined;
+  }
+
+  get experimental_telemetry(): any {
+    return undefined;
+  }
+
+  async close(): Promise<void> {
+    await this.driver.close();
+  }
+
+  //TODO: // required MastraStorage methods for threads and messages
 }
